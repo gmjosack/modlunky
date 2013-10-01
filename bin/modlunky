@@ -7,7 +7,13 @@ import modlunky
 
 def _unpack(args):
     index = modlunky.read_index(args.index)
-    modlunky.unpack(index, args.wadfile, args.output_dir)
+    modlunky.unpack_wad(index, args.wadfile, args.unpack_dir)
+
+
+def _pack(args):
+    index = modlunky.build_index(args.unpack_dir)
+    modlunky.write_index(index, args.index)
+    modlunky.pack_wad(index, args.wadfile, args.unpack_dir)
 
 
 def main():
@@ -17,13 +23,20 @@ def main():
     subparsers = parser.add_subparsers(help="sub-command help", dest="subparser_name")
 
     parser_unpack = subparsers.add_parser("unpack", help="unpack help")
-    parser_unpack.add_argument("-i", "--index", help="Index file (ex: alltex.wad.wix)")
-    parser_unpack.add_argument("-w", "--wadfile", help="Data file (ex: alltex.wad)")
-    parser_unpack.add_argument("-o", "--output_dir", help="Directory where to dump files.")
+    parser_unpack.add_argument("-i", "--index", required=True, help="Index file (ex: alltex.wad.wix)")
+    parser_unpack.add_argument("-w", "--wadfile", required=True, help="Data file (ex: alltex.wad)")
+    parser_unpack.add_argument("-u", "--unpack_dir", required=True, help="Directory where to unpack files.")
     parser_unpack.set_defaults(func=_unpack)
+
+    parser_pack = subparsers.add_parser("pack", help="pack help")
+    parser_pack.add_argument("-i", "--index", required=True, help="Name for index file (ex: alltex.wad.wix)")
+    parser_pack.add_argument("-w", "--wadfile", required=True, help="Name for Data file (ex: alltex.wad)")
+    parser_pack.add_argument("-u", "--unpack_dir", required=True, help="Directory where files had been unpacked.")
+    parser_pack.set_defaults(func=_pack)
 
     args = parser.parse_args()
     args.func(args)
+
 
 if __name__ == "__main__":
     main()
