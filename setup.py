@@ -11,6 +11,7 @@ kwargs = {
     "name": "modlunky",
     "version": str(__version__),
     "packages": ["modlunky"],
+    "scripts": ["bin/modlunky"],
     "description": "Library and Command Line Tool for Spelunky.",
     "author": "Gary M. Josack",
     "maintainer": "Gary M. Josack",
